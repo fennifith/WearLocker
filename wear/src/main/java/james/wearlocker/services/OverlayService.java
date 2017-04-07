@@ -41,7 +41,6 @@ public class OverlayService extends Service implements View.OnTouchListener {
         windowView.setOnClickListener(new OnDoubleTapListener() {
             @Override
             public void onSingleClick(View v) {
-
             }
 
             @Override
@@ -51,7 +50,8 @@ public class OverlayService extends Service implements View.OnTouchListener {
             }
         });
 
-
+        reciever = new SleepReciever(this);
+        reciever.register();
     }
 
     private void addWindowView() {
@@ -83,6 +83,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
     @Override
     public void onDestroy() {
         removeWindowView();
+        reciever.unregister();
         super.onDestroy();
     }
 
@@ -115,6 +116,9 @@ public class OverlayService extends Service implements View.OnTouchListener {
             OverlayService service = serviceReference.get();
             if (service != null) {
                 IntentFilter filter = new IntentFilter();
+                filter.addAction(Intent.ACTION_SCREEN_ON);
+                filter.addAction(Intent.ACTION_SCREEN_OFF);
+                filter.addAction(Intent.ACTION_USER_PRESENT);
                 service.registerReceiver(this, filter);
             }
         }
