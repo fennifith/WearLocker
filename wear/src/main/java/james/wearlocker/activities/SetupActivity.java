@@ -1,7 +1,6 @@
 package james.wearlocker.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -14,7 +13,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -28,11 +26,9 @@ public class SetupActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSIONS = 384;
     private static final int REQUEST_OVERLAY = 623;
-    private static final int REQUEST_ACCESSIBILITY = 635;
 
     private AppCompatCheckBox permissionsCheckBox;
     private AppCompatCheckBox overlayCheckBox;
-    private AppCompatCheckBox accessibilityCheckBox;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,9 +37,8 @@ public class SetupActivity extends AppCompatActivity {
 
         permissionsCheckBox = (AppCompatCheckBox) findViewById(R.id.permissionsCheckBox);
         overlayCheckBox = (AppCompatCheckBox) findViewById(R.id.overlayCheckBox);
-        accessibilityCheckBox = (AppCompatCheckBox) findViewById(R.id.accessibilityCheckBox);
 
-        permissionsCheckBox.setChecked(arePermissionsGranted());
+        permissionsCheckBox.setChecked(StaticUtils.arePermissionsGranted(this));
         permissionsCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,35 +74,8 @@ public class SetupActivity extends AppCompatActivity {
             }
         });
 
-        accessibilityCheckBox.setChecked(StaticUtils.isServiceRunning(this));
-        accessibilityCheckBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS), REQUEST_ACCESSIBILITY);
-            }
-        });
-    }
-
-    private boolean arePermissionsGranted() {
-        PackageInfo info;
-        try {
-            info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_PERMISSIONS);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        if (info.requestedPermissions != null) {
-            for (String permission : info.requestedPermissions) {
-                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                    Log.wtf("Permission", permission);
-                    if (!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW))
-                        return false;
-                }
-            }
-        }
-
-        return true;
+        if (!permissionsCheckBox.isChecked() || !overlayCheckBox.isChecked())
+            setResult(RESULT_CANCELED);
     }
 
     @Override
@@ -117,21 +85,30 @@ public class SetupActivity extends AppCompatActivity {
             for (int result : grantResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
                     permissionsCheckBox.setChecked(false);
+                    setResult(RESULT_CANCELED);
                     return;
                 }
             }
 
             permissionsCheckBox.setChecked(true);
+            if (Settings.canDrawOverlays(this))
+                setResult(RESULT_OK);
+            else setResult(RESULT_CANCELED);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_OVERLAY:
-                break;
-            case REQUEST_ACCESSIBILITY:
-                break;
+        if (requestCode == REQUEST_OVERLAY) {
+            if (Settings.canDrawOverlays(this)) {
+                overlayCheckBox.setChecked(true);
+                if (StaticUtils.arePermissionsGranted(this))
+                    setResult(RESULT_OK);
+                else setResult(RESULT_CANCELED);
+            } else {
+                overlayCheckBox.setChecked(false);
+                setResult(RESULT_CANCELED);
+            }
         }
     }
 }

@@ -20,20 +20,8 @@
                 android:orientation="vertical"
                 app:layout_box="all">
 
-                <SeekBar
-                    android:id="@+id/red"
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:max="255" />
-
-                <SeekBar
-                    android:id="@+id/blue"
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:max="255" />
-
-                <SeekBar
-                    android:id="@+id/green"
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/enableSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
                     android:max="255" />
