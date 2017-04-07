@@ -25,13 +25,10 @@
 
         <activity android:name=".activities.SetupActivity" />
 
-        <service
-            android:name=".services.OverlayService"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+        <service android:name=".services.OverlayService">
 
             <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
 
         </service>
