@@ -117,7 +117,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
     public void onDestroy() {
         if (windowView.getParent() != null)
             windowManager.removeViewImmediate(windowView);
-        
+
         reciever.unregister();
         super.onDestroy();
     }
@@ -176,7 +176,8 @@ public class OverlayService extends Service implements View.OnTouchListener {
                             service.windowManager.removeViewImmediate(service.windowView);
                         break;
                 }
-            }
+            } else if (service == null && ((WearLocker) context.getApplicationContext()).isEnabled())
+                startService(new Intent(context, OverlayService.class));
 
             Log.d("OverlayService", "Something happened.");
         }
