@@ -1,6 +1,7 @@
 package james.wearlocker.services;
 
 import android.animation.Animator;
+import android.app.Notification;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,7 +21,9 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
+import java.util.Locale;
 
+import james.wearlocker.R;
 import james.wearlocker.WearLocker;
 import james.wearlocker.utils.OnDoubleTapListener;
 
@@ -39,8 +42,14 @@ public class OverlayService extends Service implements View.OnTouchListener {
         wearLocker = (WearLocker) getApplicationContext();
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
+        startForeground(0, new Notification.Builder(this)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(String.format(Locale.getDefault(), getString(R.string.enabled), wearLocker.isEnabled() ? "Enabled" : "Disabled"))
+                .build()
+        );
+
         windowView = new View(this);
-        windowView.setBackgroundColor(Color.argb(50, 0, 0, 0));
+        windowView.setBackgroundColor(Color.argb(100, 0, 0, 0));
         windowView.setAlpha(0);
         windowView.setOnTouchListener(this);
         windowView.setOnClickListener(new OnDoubleTapListener() {
@@ -106,7 +115,9 @@ public class OverlayService extends Service implements View.OnTouchListener {
 
     @Override
     public void onDestroy() {
-        removeWindowView();
+        if (windowView.getParent() != null)
+            windowManager.removeViewImmediate(windowView);
+        
         reciever.unregister();
         super.onDestroy();
     }
