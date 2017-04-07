@@ -1,13 +1,14 @@
 package james.wearlocker.services;
 
+import android.animation.Animator;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.net.Uri;
-import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -37,6 +38,8 @@ public class OverlayService extends Service implements View.OnTouchListener {
         wearLocker = (WearLocker) getApplicationContext();
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         windowView = new View(this);
+        windowView.setBackgroundColor(Color.argb(50, 0, 0, 0));
+        windowView.setAlpha(0);
         windowView.setOnTouchListener(this);
         windowView.setOnClickListener(new OnDoubleTapListener() {
             @Override
@@ -64,8 +67,9 @@ public class OverlayService extends Service implements View.OnTouchListener {
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                         PixelFormat.TRANSPARENT
                 ));
+                windowView.animate().alpha(1).start();
             } catch (Exception e) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getApplicationContext()))
+                if (!Settings.canDrawOverlays(getApplicationContext()))
                     startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())));
                 else if (!(e instanceof IllegalStateException)) {
                     e.printStackTrace();
@@ -76,8 +80,26 @@ public class OverlayService extends Service implements View.OnTouchListener {
     }
 
     private void removeWindowView() {
-        if (windowManager != null && windowView.getParent() != null)
-            windowManager.removeViewImmediate(windowView);
+        if (windowManager != null && windowView.getParent() != null) {
+            windowView.animate().alpha(0).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    windowManager.removeViewImmediate(windowView);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+            }).start();
+        }
     }
 
     @Override
@@ -100,7 +122,6 @@ public class OverlayService extends Service implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-
         return false;
     }
 
@@ -131,7 +152,17 @@ public class OverlayService extends Service implements View.OnTouchListener {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            OverlayService service = serviceReference.get();
+            if (service != null && intent != null && intent.getAction() != null) {
+                switch (intent.getAction()) {
+                    case Intent.ACTION_SCREEN_ON:
+                        service.addWindowView();
+                        break;
+                    case Intent.ACTION_SCREEN_OFF:
+                        service.removeWindowView();
+                        break;
+                }
+            }
         }
     }
 }
