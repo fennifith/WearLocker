@@ -38,7 +38,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
         super.onCreate();
         wearLocker = (WearLocker) getApplicationContext();
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        
+
         windowView = new View(this);
         windowView.setBackgroundColor(Color.argb(50, 0, 0, 0));
         windowView.setAlpha(0);
@@ -161,7 +161,8 @@ public class OverlayService extends Service implements View.OnTouchListener {
                         service.addWindowView();
                         break;
                     case Intent.ACTION_SCREEN_OFF:
-                        service.removeWindowView();
+                        if (service.windowView.getParent() != null)
+                            service.windowManager.removeViewImmediate(service.windowView);
                         break;
                 }
             }

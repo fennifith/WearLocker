@@ -75,7 +75,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         wearLocker.setEnabled(isEnabled);
         enabled.setText(String.format(Locale.getDefault(), getString(R.string.enabled), isEnabled ? "Enabled" : "Disabled"));
 
-        if (!isEnabled) {
+        if (isEnabled) {
             if (StaticUtils.arePermissionsGranted(this) && Settings.canDrawOverlays(this))
                 startService(new Intent(this, OverlayService.class));
             else
