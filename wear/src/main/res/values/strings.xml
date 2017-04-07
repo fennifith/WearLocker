@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Wear Locker</string>
+
+    <string name="enabled">Current Status: %1$s</string>
 </resources>

@@ -20,10 +20,11 @@
                 android:orientation="vertical"
                 app:layout_box="all">
 
-                <android.support.v7.widget.SwitchCompat
+                <TextView
                     android:id="@+id/enableSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
+                    android:text="@string/enabled"
                     android:max="255" />
 
                 <View

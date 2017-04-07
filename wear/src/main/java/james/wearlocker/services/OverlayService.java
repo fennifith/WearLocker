@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,6 +38,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
         super.onCreate();
         wearLocker = (WearLocker) getApplicationContext();
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        
         windowView = new View(this);
         windowView.setBackgroundColor(Color.argb(50, 0, 0, 0));
         windowView.setAlpha(0);
@@ -163,6 +165,8 @@ public class OverlayService extends Service implements View.OnTouchListener {
                         break;
                 }
             }
+
+            Log.d("OverlayService", "Something happened.");
         }
     }
 }

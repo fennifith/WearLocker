@@ -20,23 +20,33 @@
                 android:orientation="vertical"
                 app:layout_box="all">
 
-                <android.support.v7.widget.AppCompatCheckBox
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="Permissions"
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
+                <TextView
                     android:id="@+id/permissionsCheckBox"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
-                    android:max="255" />
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:max="255"
+                    android:text="Miscellanus Permissions"
+                    android:textAlignment="center" />
 
-                <android.support.v7.widget.AppCompatCheckBox
+                <TextView
                     android:id="@+id/overlayCheckBox"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
-                    android:max="255" />
-
-                <android.support.v7.widget.AppCompatCheckBox
-                    android:id="@+id/accessibilityCheckBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:max="255" />
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:max="255"
+                    android:text="Draw Over Apps"
+                    android:textAlignment="center" />
 
                 <View
                     android:layout_width="wrap_content"
