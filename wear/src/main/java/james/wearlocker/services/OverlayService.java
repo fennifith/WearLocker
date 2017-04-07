@@ -1,7 +1,5 @@
 package james.wearlocker.services;
 
-import android.animation.Animator;
-import android.app.Notification;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,9 +19,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
-import java.util.Locale;
 
-import james.wearlocker.R;
 import james.wearlocker.WearLocker;
 import james.wearlocker.utils.OnDoubleTapListener;
 
@@ -32,7 +28,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
     private WindowManager windowManager;
     private View windowView;
 
-    private SleepReciever reciever;
+    private SleepReceiver reciever;
 
     private WearLocker wearLocker;
 
@@ -41,12 +37,6 @@ public class OverlayService extends Service implements View.OnTouchListener {
         super.onCreate();
         wearLocker = (WearLocker) getApplicationContext();
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-
-        startForeground(0, new Notification.Builder(this)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(String.format(Locale.getDefault(), getString(R.string.enabled), wearLocker.isEnabled() ? "Enabled" : "Disabled"))
-                .build()
-        );
 
         windowView = new View(this);
         windowView.setBackgroundColor(Color.argb(100, 0, 0, 0));
@@ -64,21 +54,24 @@ public class OverlayService extends Service implements View.OnTouchListener {
             }
         });
 
-        reciever = new SleepReciever(this);
+        reciever = new SleepReceiver(this);
         reciever.register();
     }
 
     private void addWindowView() {
         if (windowManager != null) {
             try {
-                windowManager.addView(windowView, new WindowManager.LayoutParams(
-                        WindowManager.LayoutParams.MATCH_PARENT,
-                        WindowManager.LayoutParams.MATCH_PARENT,
-                        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
-                        PixelFormat.TRANSPARENT
-                ));
-                windowView.animate().alpha(1).start();
+                if (windowView.getParent() == null) {
+                    windowManager.addView(windowView, new WindowManager.LayoutParams(
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                            PixelFormat.TRANSPARENT
+                    ));
+                }
+
+                windowView.setVisibility(View.VISIBLE);
             } catch (Exception e) {
                 if (!Settings.canDrawOverlays(getApplicationContext()))
                     startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())));
@@ -91,30 +84,13 @@ public class OverlayService extends Service implements View.OnTouchListener {
     }
 
     private void removeWindowView() {
-        if (windowManager != null && windowView.getParent() != null) {
-            windowView.animate().alpha(0).setListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    windowManager.removeViewImmediate(windowView);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                }
-            }).start();
-        }
+        if (windowManager != null && windowView.getParent() != null)
+            windowView.setVisibility(View.GONE);
     }
 
     @Override
     public void onDestroy() {
+        Log.d("OverlayService", "Destroyed");
         if (windowView.getParent() != null)
             windowManager.removeViewImmediate(windowView);
 
@@ -138,11 +114,11 @@ public class OverlayService extends Service implements View.OnTouchListener {
         return false;
     }
 
-    private class SleepReciever extends BroadcastReceiver {
+    private static class SleepReceiver extends BroadcastReceiver {
 
         private WeakReference<OverlayService> serviceReference;
 
-        public SleepReciever(OverlayService service) {
+        public SleepReceiver(OverlayService service) {
             serviceReference = new WeakReference<OverlayService>(service);
         }
 
@@ -151,8 +127,6 @@ public class OverlayService extends Service implements View.OnTouchListener {
             if (service != null) {
                 IntentFilter filter = new IntentFilter();
                 filter.addAction(Intent.ACTION_SCREEN_ON);
-                filter.addAction(Intent.ACTION_SCREEN_OFF);
-                filter.addAction(Intent.ACTION_USER_PRESENT);
                 service.registerReceiver(this, filter);
             }
         }
@@ -166,20 +140,10 @@ public class OverlayService extends Service implements View.OnTouchListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             OverlayService service = serviceReference.get();
-            if (service != null && intent != null && intent.getAction() != null) {
-                switch (intent.getAction()) {
-                    case Intent.ACTION_SCREEN_ON:
-                        service.addWindowView();
-                        break;
-                    case Intent.ACTION_SCREEN_OFF:
-                        if (service.windowView.getParent() != null)
-                            service.windowManager.removeViewImmediate(service.windowView);
-                        break;
-                }
-            } else if (service == null && ((WearLocker) context.getApplicationContext()).isEnabled())
-                startService(new Intent(context, OverlayService.class));
-
-            Log.d("OverlayService", "Something happened.");
+            if (service != null && intent != null && intent.getAction() != null)
+                service.addWindowView();
+            else if (service == null && ((WearLocker) context.getApplicationContext()).isEnabled())
+                context.startService(new Intent(context, OverlayService.class));
         }
     }
 }
