@@ -3,6 +3,7 @@ package james.wearlocker.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.widget.NestedScrollView;
@@ -11,6 +12,7 @@ import android.support.wearable.view.drawer.WearableDrawerLayout;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -52,10 +54,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         gestureText = (TextView) findViewById(R.id.gestureText);
         View preview = findViewById(R.id.preview);
 
-        if (StaticUtils.arePermissionsGranted(this) && Settings.canDrawOverlays(this)) {
+        if (Settings.canDrawOverlays(this)) {
             if (wearLocker.isEnabled())
                 startService(new Intent(this, OverlayService.class));
-        } else startActivityForResult(new Intent(this, SetupActivity.class), REQUEST_SETUP);
+        } else {
+            startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), REQUEST_SETUP);
+            Toast.makeText(this, R.string.msg_overlay_permission, Toast.LENGTH_SHORT).show();
+        }
 
         drawerLayout.peekDrawer(Gravity.BOTTOM);
         actionDrawer.lockDrawerClosed();
@@ -90,10 +95,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 enableText.setText(isEnabled ? R.string.status_enabled : R.string.status_disabled);
 
                 if (isEnabled) {
-                    if (StaticUtils.arePermissionsGranted(this) && Settings.canDrawOverlays(this))
+                    if (Settings.canDrawOverlays(this))
                         startService(new Intent(this, OverlayService.class));
-                    else
-                        startActivityForResult(new Intent(this, SetupActivity.class), REQUEST_SETUP);
+                    else {
+                        startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), REQUEST_SETUP);
+                        Toast.makeText(this, R.string.msg_overlay_permission, Toast.LENGTH_SHORT).show();
+                    }
                 } else stopService(new Intent(this, OverlayService.class));
                 break;
             case R.id.color:
@@ -121,8 +128,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUEST_SETUP:
-                if (resultCode == RESULT_OK && StaticUtils.arePermissionsGranted(this) && Settings.canDrawOverlays(this) && wearLocker.isEnabled())
-                    startService(new Intent(this, OverlayService.class));
+                if (Settings.canDrawOverlays(this)) {
+                    if (wearLocker.isEnabled())
+                        startService(new Intent(this, OverlayService.class));
+                } else {
+                    Toast.makeText(this, R.string.msg_overlay_permission_denied, Toast.LENGTH_LONG).show();
+                    finish();
+                }
                 break;
             case REQUEST_COLOR:
                 if (resultCode == RESULT_OK && data != null && data.hasExtra(WearColorPickerActivity.EXTRA_COLOR)) {

@@ -4,6 +4,8 @@
     <string name="title_status">Current Status:</string>
     <string name="title_color">Color</string>
     <string name="title_gesture">Unlock Gesture</string>
+    <string name="title_setup">Setup</string>
+    <string name="title_overlay">Draw Over Apps</string>
 
     <string name="status_enabled">Enabled</string>
     <string name="status_disabled">Disabled</string>
@@ -14,8 +16,7 @@
     <string name="gesture_swipe_down">Swipe Down</string>
     <string name="gesture_swipe_left">Swipe Left</string>
     <string name="gesture_swipe_right">Swipe Right</string>
-    <string name="title_setup">Setup</string>
-    <string name="title_misc_permissions">Miscellanus Permissions</string>
-    <string name="title_overlay">Draw Over Apps</string>
 
+    <string name="msg_overlay_permission">The app needs permission to draw over other apps in order to lock the screen.</string>
+    <string name="msg_overlay_permission_denied">Wear Locker won\'t be able to function without this permission.</string>
 </resources>
