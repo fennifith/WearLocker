@@ -42,7 +42,6 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
 
         windowView = new View(this);
         windowView.setBackgroundColor(StaticUtils.getAlphaColor(wearLocker.getColor(), 100));
-        windowView.setAlpha(0);
         windowView.setOnTouchListener(this);
         windowView.setOnClickListener(new OnDoubleTapListener() {
             @Override
@@ -98,7 +97,6 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
 
     @Override
     public void onDestroy() {
-        Log.d("OverlayService", "Destroyed");
         if (windowView.getParent() != null)
             windowManager.removeViewImmediate(windowView);
 
@@ -156,8 +154,10 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         if (Math.abs(velocityX) > Math.abs(velocityY) && Math.abs(velocityX) > 1800) {
             //TODO: horizontal swipe
+            Log.d("X", String.valueOf(velocityX));
         } else if (Math.abs(velocityY) > 1800) {
             //TODO: vertical swipe
+            Log.d("Y", String.valueOf(velocityY));
         }
         return false;
     }

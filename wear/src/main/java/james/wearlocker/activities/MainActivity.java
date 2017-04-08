@@ -118,13 +118,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 } else stopService(new Intent(this, OverlayService.class));
                 break;
             case R.id.color:
-                startActivityForResult(new Intent(this, WearColorPickerActivity.class), REQUEST_COLOR);
+                Intent colorIntent = new Intent(this, WearColorPickerActivity.class);
+                colorIntent.putExtra(WearColorPickerActivity.EXTRA_COLOR, wearLocker.getColor());
+                startActivityForResult(colorIntent, REQUEST_COLOR);
                 break;
             case R.id.gesture:
-                Intent intent = new Intent(this, OptionActivity.class);
-                intent.putExtra(OptionActivity.EXTRA_TITLE, getString(R.string.title_gesture));
-                intent.putExtra(OptionActivity.EXTRA_OPTIONS, (ArrayList<String>) wearLocker.getGestureTitles());
-                startActivityForResult(intent, REQUEST_GESTURE);
+                Intent gestureIntent = new Intent(this, OptionActivity.class);
+                gestureIntent.putExtra(OptionActivity.EXTRA_TITLE, getString(R.string.title_gesture));
+                gestureIntent.putExtra(OptionActivity.EXTRA_OPTIONS, (ArrayList<String>) wearLocker.getGestureTitles());
+                startActivityForResult(gestureIntent, REQUEST_GESTURE);
                 break;
         }
     }

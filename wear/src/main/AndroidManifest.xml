@@ -25,6 +25,8 @@
 
         <activity android:name=".activities.SetupActivity" />
 
+        <activity android:name=".activities.OptionActivity" />
+
         <service android:name=".services.OverlayService">
 
             <intent-filter>

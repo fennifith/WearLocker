@@ -19,6 +19,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 app:layout_box="all">
 
                 <LinearLayout
@@ -26,11 +28,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="4dp">
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:padding="8dp">
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/title_status"
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp" />
@@ -38,7 +42,7 @@
                     <TextView
                         android:id="@+id/enableText"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="wrap_content"
                         android:text="@string/status_disabled"
                         android:textColor="?android:textColorSecondary"
                         android:textSize="14sp" />
@@ -48,8 +52,10 @@
                 <TextView
                     android:id="@+id/color"
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:padding="4dp"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:text="@string/title_color"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
@@ -59,11 +65,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="4dp">
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:padding="8dp">
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="wrap_content"
                         android:max="255"
                         android:text="@string/title_gesture"
                         android:textColor="?android:textColorPrimary"
@@ -72,7 +80,7 @@
                     <TextView
                         android:id="@+id/gestureText"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="wrap_content"
                         android:max="255"
                         android:text="@string/gesture_double_tap"
                         android:textColor="?android:textColorSecondary"
@@ -116,7 +124,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:tint="?android:textColorPrimary"
-                app:srcCompat="@drawable/ic_done" />
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_preview" />
 
         </LinearLayout>
 

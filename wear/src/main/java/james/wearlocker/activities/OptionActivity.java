@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -33,11 +34,14 @@ public class OptionActivity extends Activity implements View.OnClickListener {
 
         title.setText(getIntent().getStringExtra(EXTRA_TITLE));
 
+        int selected = getIntent().getIntExtra(EXTRA_INDEX, -1);
         options = getIntent().getStringArrayListExtra(EXTRA_OPTIONS);
         LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 0; i < options.size(); i++) {
             TextView view = (TextView) inflater.inflate(R.layout.item_option, layout, false);
             view.setText(options.get(i));
+            if (i == selected)
+                view.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
             view.setTag(i);
             view.setOnClickListener(this);
             layout.addView(view);
