@@ -1,5 +1,21 @@
 <resources>
     <string name="app_name">Wear Locker</string>
 
-    <string name="enabled">Current Status: %1$s</string>
+    <string name="title_status">Current Status:</string>
+    <string name="title_color">Color</string>
+    <string name="title_gesture">Unlock Gesture</string>
+
+    <string name="status_enabled">Enabled</string>
+    <string name="status_disabled">Disabled</string>
+
+    <string name="gesture_double_tap">Double Tap</string>
+    <string name="gesture_hold">Press &amp; Hold</string>
+    <string name="gesture_swipe_up">Swipe Up</string>
+    <string name="gesture_swipe_down">Swipe Down</string>
+    <string name="gesture_swipe_left">Swipe Left</string>
+    <string name="gesture_swipe_right">Swipe Right</string>
+    <string name="title_setup">Setup</string>
+    <string name="title_misc_permissions">Miscellanus Permissions</string>
+    <string name="title_overlay">Draw Over Apps</string>
+
 </resources>

@@ -24,7 +24,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:text="Permissions"
+                    android:text="@string/title_setup"
                     android:textAlignment="center"
                     android:textSize="18sp" />
 
@@ -32,20 +32,18 @@
                     android:id="@+id/permissionsCheckBox"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:max="255"
-                    android:text="Miscellanus Permissions"
+                    android:text="@string/title_misc_permissions"
                     android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/overlayCheckBox"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:max="255"
-                    android:text="Draw Over Apps"
+                    android:text="@string/title_overlay"
                     android:textAlignment="center" />
 
                 <View
