@@ -17,11 +17,11 @@ public class WearLocker extends Application {
     public static final String PREF_GESTURE = "gesture";
 
     public static final int GESTURE_DOUBLE_TAP = 0;
-    public static final int GESTURE_HOLD = 5;
-    public static final int GESTURE_SWIPE_UP = 1;
-    public static final int GESTURE_SWIPE_DOWN = 2;
-    public static final int GESTURE_SWIPE_LEFT = 3;
-    public static final int GESTURE_SWIPE_RIGHT = 4;
+    public static final int GESTURE_HOLD = 1;
+    public static final int GESTURE_SWIPE_UP = 2;
+    public static final int GESTURE_SWIPE_DOWN = 3;
+    public static final int GESTURE_SWIPE_LEFT = 4;
+    public static final int GESTURE_SWIPE_RIGHT = 5;
 
     private SharedPreferences prefs;
     private List<OnPreferenceChangedListener> listeners;
