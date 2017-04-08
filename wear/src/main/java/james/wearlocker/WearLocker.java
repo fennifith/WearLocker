@@ -6,6 +6,10 @@ import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class WearLocker extends Application {
 
     private static final String PREF_ENABLED = "enabled";
@@ -48,23 +52,19 @@ public class WearLocker extends Application {
         return prefs.getInt(PREF_GESTURE, GESTURE_DOUBLE_TAP);
     }
 
+    public List<String> getGestureTitles() {
+        return new ArrayList<>(Arrays.asList(
+                getString(R.string.gesture_double_tap),
+                getString(R.string.gesture_hold),
+                getString(R.string.gesture_swipe_up),
+                getString(R.string.gesture_swipe_down),
+                getString(R.string.gesture_swipe_left),
+                getString(R.string.gesture_swipe_right)
+        ));
+    }
+
     public String getGestureTitle() {
-        switch (getGesture()) {
-            case GESTURE_DOUBLE_TAP:
-                return getString(R.string.gesture_double_tap);
-            case GESTURE_HOLD:
-                return getString(R.string.gesture_hold);
-            case GESTURE_SWIPE_UP:
-                return getString(R.string.gesture_swipe_up);
-            case GESTURE_SWIPE_DOWN:
-                return getString(R.string.gesture_swipe_down);
-            case GESTURE_SWIPE_LEFT:
-                return getString(R.string.gesture_swipe_left);
-            case GESTURE_SWIPE_RIGHT:
-                return getString(R.string.gesture_swipe_right);
-            default:
-                return "";
-        }
+        return getGestureTitles().get(getGesture());
     }
 
     public void setGesture(int gesture) {

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <android.support.wearable.view.drawer.WearableDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawerLayout"
@@ -30,7 +31,6 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="32dp"
-                        android:max="255"
                         android:text="@string/title_status"
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp" />
@@ -39,7 +39,6 @@
                         android:id="@+id/enableText"
                         android:layout_width="match_parent"
                         android:layout_height="32dp"
-                        android:max="255"
                         android:text="@string/status_disabled"
                         android:textColor="?android:textColorSecondary"
                         android:textSize="14sp" />
@@ -50,7 +49,6 @@
                     android:id="@+id/color"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
-                    android:max="255"
                     android:padding="4dp"
                     android:text="@string/title_color"
                     android:textColor="?android:textColorPrimary"

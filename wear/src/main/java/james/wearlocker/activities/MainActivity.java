@@ -12,6 +12,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import james.wearcolorpicker.WearColorPickerActivity;
 import james.wearlocker.R;
 import james.wearlocker.WearLocker;
@@ -22,6 +24,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final int REQUEST_SETUP = 524;
     private static final int REQUEST_COLOR = 837;
+    private static final int REQUEST_GESTURE = 284;
 
     private WearableDrawerLayout drawerLayout;
 
@@ -83,8 +86,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     startService(new Intent(this, OverlayService.class));
                 break;
             case REQUEST_COLOR:
-                if (resultCode == RESULT_OK && data != null && data.hasExtra(WearColorPickerActivity.EXTRA_COLOR))
-                    wearLocker.setColor(data.getIntExtra(WearColorPickerActivity.EXTRA_COLOR, Color.BLACK));
+                if (resultCode == RESULT_OK && data != null && data.hasExtra(WearColorPickerActivity.EXTRA_COLOR)) {
+                    int color = data.getIntExtra(WearColorPickerActivity.EXTRA_COLOR, Color.BLACK);
+                    wearLocker.setColor(color);
+                    this.color.setBackgroundColor(StaticUtils.getAlphaColor(color, 100));
+                }
+                break;
+            case REQUEST_GESTURE:
+                if (resultCode == RESULT_OK && data != null && data.hasExtra(OptionActivity.EXTRA_INDEX)) {
+                    wearLocker.setGesture(data.getIntExtra(OptionActivity.EXTRA_INDEX, wearLocker.getGesture()));
+                    gestureText.setText(wearLocker.getGestureTitle());
+                }
                 break;
         }
     }
@@ -109,6 +121,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 startActivityForResult(new Intent(this, WearColorPickerActivity.class), REQUEST_COLOR);
                 break;
             case R.id.gesture:
+                Intent intent = new Intent(this, OptionActivity.class);
+                intent.putExtra(OptionActivity.EXTRA_TITLE, getString(R.string.title_gesture));
+                intent.putExtra(OptionActivity.EXTRA_OPTIONS, (ArrayList<String>) wearLocker.getGestureTitles());
+                startActivityForResult(intent, REQUEST_GESTURE);
                 break;
         }
     }
