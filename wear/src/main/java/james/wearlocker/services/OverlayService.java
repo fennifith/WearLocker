@@ -24,7 +24,7 @@ import james.wearlocker.WearLocker;
 import james.wearlocker.utils.OnDoubleTapListener;
 import james.wearlocker.utils.StaticUtils;
 
-public class OverlayService extends Service implements View.OnTouchListener, GestureDetector.OnGestureListener {
+public class OverlayService extends Service implements View.OnTouchListener, GestureDetector.OnGestureListener, WearLocker.OnPreferenceChangedListener {
 
     private WindowManager windowManager;
     private GestureDetector gestureDetector;
@@ -62,6 +62,8 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
 
         reciever = new SleepReceiver(this);
         reciever.register();
+
+        wearLocker.addListener(this);
     }
 
     private void showWindowView() {
@@ -101,6 +103,7 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
             windowManager.removeViewImmediate(windowView);
 
         reciever.unregister();
+        wearLocker.removeListener(this);
         super.onDestroy();
     }
 
@@ -151,7 +154,21 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        if (Math.abs(velocityX) > Math.abs(velocityY) && Math.abs(velocityX) > 1800) {
+            //TODO: horizontal swipe
+        } else if (Math.abs(velocityY) > 1800) {
+            //TODO: vertical swipe
+        }
         return false;
+    }
+
+    @Override
+    public void onPreferenceChanged(String name) {
+        switch (name) {
+            case WearLocker.PREF_COLOR:
+                windowView.setBackgroundColor(StaticUtils.getAlphaColor(wearLocker.getColor(), 100));
+                break;
+        }
     }
 
     private static class SleepReceiver extends BroadcastReceiver {

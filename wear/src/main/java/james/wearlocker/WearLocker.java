@@ -12,9 +12,9 @@ import java.util.List;
 
 public class WearLocker extends Application {
 
-    private static final String PREF_ENABLED = "enabled";
-    private static final String PREF_COLOR = "color";
-    private static final String PREF_GESTURE = "gesture";
+    public static final String PREF_ENABLED = "enabled";
+    public static final String PREF_COLOR = "color";
+    public static final String PREF_GESTURE = "gesture";
 
     public static final int GESTURE_DOUBLE_TAP = 0;
     public static final int GESTURE_HOLD = 5;
@@ -24,11 +24,13 @@ public class WearLocker extends Application {
     public static final int GESTURE_SWIPE_RIGHT = 4;
 
     private SharedPreferences prefs;
+    private List<OnPreferenceChangedListener> listeners;
 
     @Override
     public void onCreate() {
         super.onCreate();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        listeners = new ArrayList<>();
     }
 
     public boolean isEnabled() {
@@ -37,6 +39,7 @@ public class WearLocker extends Application {
 
     public void setEnabled(boolean enabled) {
         prefs.edit().putBoolean(PREF_ENABLED, enabled).apply();
+        onPreferenceChanged(PREF_ENABLED);
     }
 
     @ColorInt
@@ -46,6 +49,7 @@ public class WearLocker extends Application {
 
     public void setColor(@ColorInt int color) {
         prefs.edit().putInt(PREF_COLOR, color).apply();
+        onPreferenceChanged(PREF_COLOR);
     }
 
     public int getGesture() {
@@ -69,5 +73,24 @@ public class WearLocker extends Application {
 
     public void setGesture(int gesture) {
         prefs.edit().putInt(PREF_GESTURE, gesture).apply();
+        onPreferenceChanged(PREF_GESTURE);
+    }
+
+    public void addListener(OnPreferenceChangedListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(OnPreferenceChangedListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void onPreferenceChanged(String name) {
+        for (OnPreferenceChangedListener listener : listeners) {
+            listener.onPreferenceChanged(name);
+        }
+    }
+
+    public interface OnPreferenceChangedListener {
+        void onPreferenceChanged(String name);
     }
 }
