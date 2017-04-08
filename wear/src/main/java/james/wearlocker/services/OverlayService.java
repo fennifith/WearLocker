@@ -52,10 +52,8 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
 
             @Override
             public void onDoubleClick(View v) {
-                if (wearLocker.getGesture() == WearLocker.GESTURE_DOUBLE_TAP) {
+                if (wearLocker.getGesture() == WearLocker.GESTURE_DOUBLE_TAP)
                     hideWindowView();
-                    v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                }
             }
         });
 
@@ -93,8 +91,10 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
     }
 
     private void hideWindowView() {
-        if (windowManager != null && windowView.getParent() != null)
+        if (windowManager != null && windowView.getParent() != null) {
             windowView.setVisibility(View.GONE);
+            windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+        }
     }
 
     @Override
@@ -155,18 +155,25 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
     public void onLongPress(MotionEvent e) {
         if (wearLocker.getGesture() == WearLocker.GESTURE_HOLD) {
             hideWindowView();
-            windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
         }
     }
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if (Math.abs(velocityX) > Math.abs(velocityY) && Math.abs(velocityX) > 1800) {
-            //TODO: horizontal swipe
-            Log.d("X", String.valueOf(velocityX));
-        } else if (Math.abs(velocityY) > 1800) {
-            //TODO: vertical swipe
-            Log.d("Y", String.valueOf(velocityY));
+        if (Math.abs(velocityX) > Math.abs(velocityY)) {
+            Log.d("Gesture", "X: " + String.valueOf(velocityX) + " Y: " + String.valueOf(velocityY) + " (horizontal) " + wearLocker.getGestureTitle());
+
+            if (velocityX > 1800 && wearLocker.getGesture() == WearLocker.GESTURE_SWIPE_RIGHT)
+                hideWindowView();
+            else if (velocityX < -1800 && wearLocker.getGesture() == WearLocker.GESTURE_SWIPE_LEFT)
+                hideWindowView();
+        } else {
+            Log.d("Gesture", "X: " + String.valueOf(velocityX) + " Y: " + String.valueOf(velocityY) + " (vertical) " + wearLocker.getGestureTitle());
+
+            if (velocityY > 1800 && wearLocker.getGesture() == WearLocker.GESTURE_SWIPE_DOWN)
+                hideWindowView();
+            else if (velocityY < -1800 && wearLocker.getGesture() == WearLocker.GESTURE_SWIPE_UP)
+                hideWindowView();
         }
         return false;
     }

@@ -105,6 +105,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Intent gestureIntent = new Intent(this, OptionActivity.class);
                 gestureIntent.putExtra(OptionActivity.EXTRA_TITLE, getString(R.string.title_gesture));
                 gestureIntent.putExtra(OptionActivity.EXTRA_OPTIONS, (ArrayList<String>) wearLocker.getGestureTitles());
+                gestureIntent.putExtra(OptionActivity.EXTRA_INDEX, wearLocker.getGesture());
                 startActivityForResult(gestureIntent, REQUEST_GESTURE);
                 break;
             case R.id.preview:
