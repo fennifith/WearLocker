@@ -16,7 +16,7 @@ public class StaticUtils {
 
     @ColorInt
     public static int getAlphaColor(@ColorInt int color, int alpha) {
-        return Color.argb(alpha, Color.red(color), Color.blue(color), Color.green(color));
+        return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
     }
 
     public static boolean arePermissionsGranted(Context context) {
