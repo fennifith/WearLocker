@@ -50,6 +50,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         color = findViewById(R.id.color);
         gesture = findViewById(R.id.gesture);
         gestureText = (TextView) findViewById(R.id.gestureText);
+        View preview = findViewById(R.id.preview);
 
         if (StaticUtils.arePermissionsGranted(this) && Settings.canDrawOverlays(this)) {
             if (wearLocker.isEnabled())
@@ -75,30 +76,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         gestureText.setText(wearLocker.getGestureTitle());
         gesture.setOnClickListener(this);
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_SETUP:
-                if (resultCode == RESULT_OK && StaticUtils.arePermissionsGranted(this) && Settings.canDrawOverlays(this) && wearLocker.isEnabled())
-                    startService(new Intent(this, OverlayService.class));
-                break;
-            case REQUEST_COLOR:
-                if (resultCode == RESULT_OK && data != null && data.hasExtra(WearColorPickerActivity.EXTRA_COLOR)) {
-                    int color = data.getIntExtra(WearColorPickerActivity.EXTRA_COLOR, Color.BLACK);
-                    wearLocker.setColor(color);
-                    this.color.setBackgroundColor(StaticUtils.getAlphaColor(color, 100));
-                }
-                break;
-            case REQUEST_GESTURE:
-                if (resultCode == RESULT_OK && data != null && data.hasExtra(OptionActivity.EXTRA_INDEX)) {
-                    wearLocker.setGesture(data.getIntExtra(OptionActivity.EXTRA_INDEX, wearLocker.getGesture()));
-                    gestureText.setText(wearLocker.getGestureTitle());
-                }
-                break;
-        }
+        preview.setOnClickListener(this);
     }
 
     @Override
@@ -127,6 +106,35 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 gestureIntent.putExtra(OptionActivity.EXTRA_TITLE, getString(R.string.title_gesture));
                 gestureIntent.putExtra(OptionActivity.EXTRA_OPTIONS, (ArrayList<String>) wearLocker.getGestureTitles());
                 startActivityForResult(gestureIntent, REQUEST_GESTURE);
+                break;
+            case R.id.preview:
+                Intent previewIntent = new Intent(this, OverlayService.class);
+                previewIntent.setAction(OverlayService.ACTION_SHOW_OVERLAY);
+                startService(previewIntent);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_SETUP:
+                if (resultCode == RESULT_OK && StaticUtils.arePermissionsGranted(this) && Settings.canDrawOverlays(this) && wearLocker.isEnabled())
+                    startService(new Intent(this, OverlayService.class));
+                break;
+            case REQUEST_COLOR:
+                if (resultCode == RESULT_OK && data != null && data.hasExtra(WearColorPickerActivity.EXTRA_COLOR)) {
+                    int color = data.getIntExtra(WearColorPickerActivity.EXTRA_COLOR, Color.BLACK);
+                    wearLocker.setColor(color);
+                    this.color.setBackgroundColor(StaticUtils.getAlphaColor(color, 100));
+                }
+                break;
+            case REQUEST_GESTURE:
+                if (resultCode == RESULT_OK && data != null && data.hasExtra(OptionActivity.EXTRA_INDEX)) {
+                    wearLocker.setGesture(data.getIntExtra(OptionActivity.EXTRA_INDEX, wearLocker.getGesture()));
+                    gestureText.setText(wearLocker.getGestureTitle());
+                }
                 break;
         }
     }

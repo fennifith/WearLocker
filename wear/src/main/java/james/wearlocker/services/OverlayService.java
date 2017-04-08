@@ -26,6 +26,8 @@ import james.wearlocker.utils.StaticUtils;
 
 public class OverlayService extends Service implements View.OnTouchListener, GestureDetector.OnGestureListener, WearLocker.OnPreferenceChangedListener {
 
+    public static final String ACTION_SHOW_OVERLAY = "james.wearlocker.ACTION_SHOW_OVERLAY";
+
     private WindowManager windowManager;
     private GestureDetector gestureDetector;
     private View windowView;
@@ -113,6 +115,13 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null && intent.getAction() != null) {
+            switch (intent.getAction()) {
+                case ACTION_SHOW_OVERLAY:
+                    showWindowView();
+                    break;
+            }
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 

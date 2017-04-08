@@ -103,14 +103,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:peek_view="@+id/action_done">
+        app:peek_view="@+id/preview">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp" />
 
         <LinearLayout
-            android:id="@+id/action_done"
+            android:id="@+id/preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:selectableItemBackground"
