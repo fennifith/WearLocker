@@ -13,6 +13,7 @@ import java.util.List;
 public class WearLocker extends Application {
 
     public static final String PREF_ENABLED = "enabled";
+    public static final String PREF_VIBRATE = "vibrate";
     public static final String PREF_COLOR = "color";
     public static final String PREF_GESTURE = "gesture";
 
@@ -40,6 +41,14 @@ public class WearLocker extends Application {
     public void setEnabled(boolean enabled) {
         prefs.edit().putBoolean(PREF_ENABLED, enabled).apply();
         onPreferenceChanged(PREF_ENABLED);
+    }
+
+    public boolean isVibrate() {
+        return prefs.getBoolean(PREF_VIBRATE, true);
+    }
+
+    public void setVibrate(boolean vibrate) {
+        prefs.edit().putBoolean(PREF_VIBRATE, vibrate).apply();
     }
 
     @ColorInt

@@ -8,11 +8,11 @@ import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -33,6 +33,7 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
     private View windowView;
 
     private SleepReceiver reciever;
+    private Vibrator vibrator;
 
     private WearLocker wearLocker;
 
@@ -41,6 +42,7 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
         super.onCreate();
         wearLocker = (WearLocker) getApplicationContext();
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         windowView = new View(this);
         windowView.setBackgroundColor(StaticUtils.getAlphaColor(wearLocker.getColor(), 100));
@@ -93,7 +95,8 @@ public class OverlayService extends Service implements View.OnTouchListener, Ges
     private void hideWindowView() {
         if (windowManager != null && windowView.getParent() != null) {
             windowView.setVisibility(View.GONE);
-            windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            if (wearLocker.isVibrate())
+                vibrator.vibrate(100);
         }
     }
 
