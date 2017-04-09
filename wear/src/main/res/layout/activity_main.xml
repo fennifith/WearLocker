@@ -69,7 +69,7 @@
                         android:id="@+id/vibrationText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/status_disabled"
+                        android:text="@string/status_enabled"
                         android:textColor="?android:textColorSecondary"
                         android:textSize="14sp" />
 
