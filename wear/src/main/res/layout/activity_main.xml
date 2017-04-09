@@ -49,6 +49,32 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/vibration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_vibration"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/vibrationText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/status_disabled"
+                        android:textColor="?android:textColorSecondary"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/color"
                     android:layout_width="match_parent"

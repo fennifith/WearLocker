@@ -6,6 +6,7 @@
     <string name="title_gesture">Unlock Gesture</string>
     <string name="title_setup">Setup</string>
     <string name="title_overlay">Draw Over Apps</string>
+    <string name="title_vibration">Vibration</string>
 
     <string name="status_enabled">Enabled</string>
     <string name="status_disabled">Disabled</string>

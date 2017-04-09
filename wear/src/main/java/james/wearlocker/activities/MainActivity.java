@@ -32,6 +32,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private View enable;
     private TextView enableText;
+    private View vibration;
+    private TextView vibrationText;
     private View color;
     private View gesture;
     private TextView gestureText;
@@ -49,6 +51,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         NestedScrollView scrollView = (NestedScrollView) findViewById(R.id.scrollView);
         enable = findViewById(R.id.enable);
         enableText = (TextView) findViewById(R.id.enableText);
+        vibration = findViewById(R.id.vibration);
+        vibrationText = (TextView) findViewById(R.id.vibrationText);
         color = findViewById(R.id.color);
         gesture = findViewById(R.id.gesture);
         gestureText = (TextView) findViewById(R.id.gestureText);
@@ -76,6 +80,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         enableText.setText(wearLocker.isEnabled() ? R.string.status_enabled : R.string.status_disabled);
         enable.setOnClickListener(this);
 
+        vibrationText.setText(wearLocker.isVibrate() ? R.string.status_enabled : R.string.status_disabled);
+        vibration.setOnClickListener(this);
+
         color.setBackgroundColor(StaticUtils.getAlphaColor(wearLocker.getColor(), 100));
         color.setOnClickListener(this);
 
@@ -102,6 +109,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         Toast.makeText(this, R.string.msg_overlay_permission, Toast.LENGTH_SHORT).show();
                     }
                 } else stopService(new Intent(this, OverlayService.class));
+                break;
+            case R.id.vibration:
+                boolean isVibration = !wearLocker.isVibrate();
+                wearLocker.setVibrate(isVibration);
+                vibrationText.setText(isVibration ? R.string.status_enabled : R.string.status_disabled);
                 break;
             case R.id.color:
                 Intent colorIntent = new Intent(this, WearColorPickerActivity.class);
