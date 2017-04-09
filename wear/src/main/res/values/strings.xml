@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Wear Locker</string>
 
-    <string name="title_status">Current Status:</string>
+    <string name="title_status">Lock Screen</string>
     <string name="title_color">Color</string>
     <string name="title_gesture">Unlock Gesture</string>
     <string name="title_setup">Setup</string>
